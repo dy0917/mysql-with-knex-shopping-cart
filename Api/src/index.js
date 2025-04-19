@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 require("dotenv").config();
 require("./db");
 const userRoute = require("./routes/userRoute");
@@ -6,6 +7,7 @@ const paymentRoute = require("./routes/paymentRoute");
 const productRoute = require("./routes/productRoute");
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 const port = 3000;
 
