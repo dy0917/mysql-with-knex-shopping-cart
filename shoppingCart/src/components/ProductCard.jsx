@@ -5,7 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
+import { Link } from "react-router";
 
 export default function ProductCard({ product }) {
   return (
@@ -27,7 +27,9 @@ export default function ProductCard({ product }) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Learn More</Button>
+          <Link to={`/products/${product.id}`}>
+            <Button size="small">Learn More</Button>
+          </Link>
         </CardActions>
       </Card>
     </Box>

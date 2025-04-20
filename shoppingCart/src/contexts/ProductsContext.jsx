@@ -26,6 +26,11 @@ export const ProductsProvider = (props) => {
     error: "",
   });
 
+  const getProductById = (id) => {
+    console.log()
+    return productsState.products.find((p) => p.id == id);
+  };
+
   useEffect(() => {
     const loadProducts = async () => {
       const products = await axios.get("http://localhost:3000/api/products");
@@ -34,7 +39,7 @@ export const ProductsProvider = (props) => {
     loadProducts();
   }, []);
   return (
-    <ProductsContext.Provider value={{ productsState }}>
+    <ProductsContext.Provider value={{ productsState, getProductById }}>
       {props.children}
     </ProductsContext.Provider>
   );

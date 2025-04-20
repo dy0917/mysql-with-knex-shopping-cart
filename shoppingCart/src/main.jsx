@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
-import App from "./App.jsx";
 import { ProductsProvider } from "./contexts/ProductsContext.jsx";
+import App from './App.jsx'
 
 createRoot(document.getElementById("root")).render(
   <ProductsProvider>
