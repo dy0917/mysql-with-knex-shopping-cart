@@ -11,10 +11,16 @@ import {
   Button,
 } from "@mui/material";
 import { ProductsContext } from "../contexts/ProductsContext";
+import { CartContext } from "../contexts/CartContext";
 function Product(props) {
   let params = useParams();
-  const { productsState, getProductById } = useContext(ProductsContext);
+  const { getProductById } = useContext(ProductsContext);
   const product = getProductById(params.productId);
+  const { cartDispatch } = useContext(CartContext);
+
+  const onAddToCart = () => {
+    cartDispatch({ type: "addToCart", payload: product });
+  };
   return (
     <>
       <Container>
@@ -39,7 +45,9 @@ function Product(props) {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small">Add to Cart</Button>
+              <Button size="small" onClick={onAddToCart}>
+                Add to Cart
+              </Button>
             </CardActions>
           </Card>
         </Grid>

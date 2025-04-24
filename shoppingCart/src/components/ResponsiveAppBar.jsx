@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,17 +8,21 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+import Badge from '@mui/material/Badge';
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { NavLink } from "react-router";
+
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { NavLink, Link } from "react-router";
+import { CartContext } from "../contexts/CartContext";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState();
+  const { cart } = useContext(CartContext);
 
   const [anchorElUser, setAnchorElUser] = useState();
 
@@ -119,6 +123,13 @@ function ResponsiveAppBar() {
             </NavLink>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
+            <IconButton sx={{ p: 0, mx: 2 }}>
+              <Link to="/cart">
+                <Badge badgeContent={cart.length} color="danger">
+                  <ShoppingCartIcon />
+                </Badge>
+              </Link>
+            </IconButton>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

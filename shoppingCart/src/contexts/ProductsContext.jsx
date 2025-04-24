@@ -27,7 +27,6 @@ export const ProductsProvider = (props) => {
   });
 
   const getProductById = (id) => {
-    console.log()
     return productsState.products.find((p) => p.id == id);
   };
 
