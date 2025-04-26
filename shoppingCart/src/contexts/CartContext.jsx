@@ -5,7 +5,14 @@ export const CartContext = createContext("Kingsley");
 function reducer(state, action) {
   if (action.type === "addToCart") {
     return [...state, action.payload];
-  } else if (action.type === "removeFromCart") {
+  } else if ((action.type === "removeFromCart", action.payload)) {
+    const copiedState = [...state];
+    const targetIndex = copiedState.findIndex(
+      (product) => product.id === action.payload.id
+    );
+    copiedState.splice(targetIndex, 1);
+    return copiedState;
+  } else if (action.type === "clearCart") {
     return [];
   }
   return state;

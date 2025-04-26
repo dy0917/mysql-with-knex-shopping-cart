@@ -6,8 +6,11 @@ const addPaymentToDB = async (data) => {
 };
 
 const createPaymentWithPaymentItems = async ({ userId, products }) => {
-  console.log("createPaymentWithPaymentItems", userId, products);
   const now = new Date();
+  const totalAmount = products.reduce(
+    (n, { price }) => n + parseFloat(price),
+    0
+  );
   try {
     const payment = await Sequelize.transaction(async (t) => {
       const payment = await Payment.create(
@@ -15,6 +18,7 @@ const createPaymentWithPaymentItems = async ({ userId, products }) => {
           userId,
           created_at: now,
           updated_at: now,
+          totalAmount,
         },
         { transaction: t }
       );
@@ -41,7 +45,7 @@ const createPaymentWithPaymentItems = async ({ userId, products }) => {
 };
 
 const getPaymentsByUserIdFromDB = async (userId) => {
-  const payments = await Payment.findOne({
+  const payments = await Payment.findAll({
     where: { userId },
     include: {
       model: PaymentItem,

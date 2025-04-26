@@ -8,9 +8,8 @@ const {
 router.get("/payments/:uid", async (req, res) => {
   try {
     const { uid } = req.params;
-    console.log("params", uid);
     const payments = await getPyamentByUId(uid);
-    res.send(payments);
+    res.json(payments);
   } catch (err) {
     console.log(err);
     res.send({ result: 500, error: err.message });
@@ -21,6 +20,10 @@ router.post("/payments", async (req, res) => {
   try {
     console.log(req.body);
     const payment = await addPayment(req.body);
+    if (!payment) {
+      res.send({ result: 500 });
+      return;
+    }
     res.send({ data: payment });
   } catch (err) {
     console.log(err);

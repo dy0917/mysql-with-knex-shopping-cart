@@ -1,18 +1,12 @@
 import { useContext, useState } from "react";
-import { useParams } from "react-router";
 import * as React from "react";
-import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import { ProductsContext } from "../contexts/ProductsContext";
-
 import { DataGrid, GRID_STRING_COL_DEF } from "@mui/x-data-grid";
 import { CartContext } from "../contexts/CartContext";
-import { Button, Container } from "@mui/material";
+import { Button, Container, Grid } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
 
 const rows = [
   { id: 1, name: "Data Grid", description: "the Community version" },
@@ -21,30 +15,28 @@ const rows = [
 ];
 
 const ActionCell = (props) => {
+  const { id } = props.row;
   const { cartDispatch } = useContext(CartContext);
+  const { getProductById } = useContext(ProductsContext);
   return (
     <>
-      <Button onClick={() => cartDispatch({ type: "removeFromCart" })}>
+      <Button
+        onClick={() =>
+          cartDispatch({ type: "removeFromCart", payload: getProductById(id) })
+        }
+      >
         <RemoveIcon />
       </Button>
       {props.row.total}
-      <Button onClick={() => cartDispatch({ type: "removeFromCart" })}>
+      <Button
+        onClick={() =>
+          cartDispatch({ type: "addToCart", payload: getProductById(id) })
+        }
+      >
         <AddIcon />
       </Button>
     </>
   );
-};
-
-const actionCellColumnType = {
-  ...GRID_STRING_COL_DEF,
-  type: "custom",
-  resizable: false,
-  filterable: false,
-  sortable: false,
-  editable: false,
-  groupable: false,
-  display: "flex",
-  renderCell: (params) => <ActionCell {...params} />,
 };
 
 const columns = [
@@ -52,10 +44,9 @@ const columns = [
   { field: "description", headerName: "Description", width: 300 },
   {
     field: "action",
-    ...actionCellColumnType,
     headerName: "Action",
     renderCell: (params) => <ActionCell {...params} />,
-    width: 150,
+    width: 300,
     valueGetter: (value, row) => row.monthlyDownloads,
   },
 ];
@@ -63,16 +54,25 @@ const columns = [
 export default function Cart() {
   const { cart, groupedItem } = useContext(CartContext);
   const { getProductById } = useContext(ProductsContext);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const groupedObject = groupedItem();
 
-  const customArray = Object.keys(groupedObject)
-    .map((key) => ({
-      id: key,
-      total: groupedObject[key].length,
-    }))
-    .map((item) => {
-      return { ...item, ...getProductById(item.id) };
+  const total = cart.reduce((n, { price }) => n + parseFloat(price), 0);
+
+  const customArray = Object.keys(groupedObject).map((key) => ({
+    id: key,
+    total: groupedObject[key].length,
+    ...getProductById(key),
+  }));
+
+  const onCheckout = async () => {
+    setButtonLoading(true);
+    const paymnent = await axios.post("http://localhost:3000/api/payments", {
+      userId: 1,
+      products: cart,
     });
+    setButtonLoading(false);
+  };
   return (
     <Container>
       <DataGrid
@@ -81,6 +81,14 @@ export default function Cart() {
         hideFooterPagination
         hideFooterSelectedRowCount
       />
+      <Grid container>
+        <Grid size={2}>Total:{total}</Grid>
+        <Grid size={2} offset={"auto"}>
+          <Button loading={buttonLoading} onClick={onCheckout}>
+            Checkout
+          </Button>
+        </Grid>
+      </Grid>
     </Container>
   );
 }

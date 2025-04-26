@@ -8,10 +8,11 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Badge from '@mui/material/Badge';
+import Badge from "@mui/material/Badge";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { Grid } from "@mui/material";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { NavLink, Link } from "react-router";
@@ -118,9 +119,16 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <NavLink to="/" end>
-              Products
-            </NavLink>
+            <Grid sx={{ mx: 0.5 }}>
+              <NavLink to="/" end>
+                Products
+              </NavLink>
+            </Grid>
+            <Grid sx={{ mx: 0.5 }}>
+              <NavLink to="/orders" end>
+                Orders
+              </NavLink>
+            </Grid>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <IconButton sx={{ p: 0, mx: 2 }}>
