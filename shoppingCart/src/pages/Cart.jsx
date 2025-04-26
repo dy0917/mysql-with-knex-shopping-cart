@@ -16,14 +16,15 @@ const rows = [
 
 const ActionCell = (props) => {
   const { id } = props.row;
-  const { cartDispatch } = useContext(CartContext);
+  const { cartDispatch, clearCart } = useContext(CartContext);
   const { getProductById } = useContext(ProductsContext);
   return (
     <>
       <Button
-        onClick={() =>
-          cartDispatch({ type: "removeFromCart", payload: getProductById(id) })
-        }
+        onClick={() => {
+          cartDispatch({ type: "removeFromCart", payload: getProductById(id) });
+          clearCart();
+        }}
       >
         <RemoveIcon />
       </Button>

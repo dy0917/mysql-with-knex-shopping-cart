@@ -11,6 +11,7 @@ import { Button, Container, Grid } from "@mui/material";
 const columns = [
   { field: "title", headerName: "Title", width: 200 },
   { field: "description", headerName: "Description", width: 300 },
+  { field: "price", headerName: "Unit price", width: 300 },
 ];
 
 export default function Payment() {
