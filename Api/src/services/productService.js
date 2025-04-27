@@ -1,8 +1,10 @@
 let { Product } = require("../models"); //matches index.js
 
+const products = [];
+
 const getProducts = async () => {
-  const users = await Product.findAll({});
-  return users;
+  const products = await Product.findAll({});
+  return products;
 };
 
 module.exports = { getProducts };

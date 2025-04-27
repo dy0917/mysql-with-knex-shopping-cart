@@ -53,7 +53,7 @@ const columns = [
 ];
 
 export default function Cart() {
-  const { cart, groupedItem } = useContext(CartContext);
+  const { cart, groupedItem, cartDispatch } = useContext(CartContext);
   const { getProductById } = useContext(ProductsContext);
   const [buttonLoading, setButtonLoading] = useState(false);
   const groupedObject = groupedItem();
@@ -68,10 +68,12 @@ export default function Cart() {
 
   const onCheckout = async () => {
     setButtonLoading(true);
+
     const paymnent = await axios.post("http://localhost:3000/api/payments", {
       userId: 1,
       products: cart,
     });
+    cartDispatch({ type: "clearCart" });
     setButtonLoading(false);
   };
   return (
