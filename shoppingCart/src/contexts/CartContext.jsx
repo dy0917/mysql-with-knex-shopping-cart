@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 import axios from "axios";
-export const CartContext = createContext("Kingsley");
+export const CartContext = createContext();
 
 function reducer(state, action) {
   if (action.type === "addToCart") {
