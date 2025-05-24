@@ -4,6 +4,8 @@ const {
   checkPassword,
 } = require("../services/userService");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const privateKey = "superSecret";
 const register = async (userBody) => {
   const { firstName, lastName, emailId, password } = userBody;
 
@@ -25,7 +27,10 @@ const register = async (userBody) => {
 
 const login = async ({ emailId, password }) => {
   const user = await checkPassword({ emailId, password });
-  return user;
+  const token = await jwt.sign(user, privateKey, { expiresIn: "3d" });
+  const verifiedResult = await jwt.verify(token, privateKey);
+  console.log("verifiedResult", token, verifiedResult);
+  return { user, token };
 };
 
 module.exports = {

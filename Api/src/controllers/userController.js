@@ -19,9 +19,11 @@ const createUser = async (userId) => {
 
 const checkPassword = async ({ emailId, password }) => {
   //creates a new user using JSON data POSTed in request body
-  console.log("{ emailId, password }", { emailId, password });
+
   const targetUser = await getUserByEmail(emailId);
-  const result = bcrypt.compare(password, targetUser.password);
+  if (!targetUser) return undefined;
+  const result = await bcrypt.compare(password, targetUser.password);
+  console.log("result", result);
   if (result) {
     const users = await getAllUsers({ emailId });
     return users[0];

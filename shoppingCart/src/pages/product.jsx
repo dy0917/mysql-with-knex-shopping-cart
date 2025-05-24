@@ -17,7 +17,7 @@ function Product(props) {
   const { getProductById } = useContext(ProductsContext);
   const product = getProductById(params.productId);
   const { cartDispatch } = useContext(CartContext);
-
+  console.log("asdfasdf");
   const onAddToCart = () => {
     cartDispatch({ type: "addToCart", payload: product });
   };

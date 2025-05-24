@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { getUsers, createUser,checkPassword} = require("../controllers/userController");
+const {
+  getUsers,
+  createUser,
+  checkPassword,
+} = require("../controllers/userController");
 
 router.get("/users", async (req, res) => {
   try {
@@ -16,7 +20,7 @@ router.get("/users", async (req, res) => {
 router.post("/users", async (req, res) => {
   try {
     const user = await createUser(req.body);
-    res.send({ data: user });
+    res.send(user);
   } catch (err) {
     console.log(err);
     res.send({ result: 500, error: err.message });
@@ -26,8 +30,9 @@ router.post("/users", async (req, res) => {
 router.post("/users/checkPassword", async (req, res) => {
   try {
     const user = await checkPassword(req.body);
-    if(user){res.send({ data: user });}
-    else{
+    if (user) {
+      res.send(user);
+    } else {
       res.status(401).send();
     }
   } catch (err) {
@@ -35,6 +40,5 @@ router.post("/users/checkPassword", async (req, res) => {
     res.send({ result: 500, error: err.message });
   }
 });
-
 
 module.exports = router;

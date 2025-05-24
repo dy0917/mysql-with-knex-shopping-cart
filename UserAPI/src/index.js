@@ -8,10 +8,6 @@ const port = 3001;
 
 const authRoute = require("./routes/authRoute");
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.use("/api/auth", authRoute);
 
 app.listen(port, () => {

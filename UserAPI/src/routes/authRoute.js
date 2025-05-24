@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { register, login } = require("../controllers/authController");
+const { authMiddleWare } = require("../middlware/authMiddleware");
 
-router.get("/:id", (req, res) => {
-  res.send("user route");
+router.get("/me", authMiddleWare, async (req, res) => {
+  console.log("req.loginUser", req.loginUser);
+  res.send(req.loginUser);
 });
 
 router.post("/create", async (req, res) => {
@@ -16,12 +18,13 @@ router.post("/create", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const user = await login(req.body);
-    if (!user) {
+    const result = await login(req.body);
+    if (!result) {
       res.status(401).send();
     }
-    res.status(200).send(user);
+    res.status(200).send(result);
   } catch (e) {
+    console.log(e);
     res.status(401).send();
   }
 });

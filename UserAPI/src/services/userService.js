@@ -17,6 +17,7 @@ const checkPassword = async (userBody) => {
     `http://localhost:3000/api/users/checkPassword`,
     userBody
   );
+
   return user.data;
 };
 

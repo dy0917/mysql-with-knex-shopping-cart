@@ -17,6 +17,7 @@ import { Grid } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { NavLink, Link } from "react-router";
 import { CartContext } from "../contexts/CartContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -24,6 +25,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState();
   const { cart } = useContext(CartContext);
+  const { authDispatch } = useContext(AuthContext);
 
   const [anchorElUser, setAnchorElUser] = useState();
 
@@ -38,7 +40,10 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (e) => {
+    if (e.target.textContent == "Logout") {
+      authDispatch({ type: "logout" });
+    }
     setAnchorElUser(null);
   };
 
