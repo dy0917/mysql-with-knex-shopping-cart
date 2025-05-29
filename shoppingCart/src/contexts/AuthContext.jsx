@@ -1,18 +1,26 @@
 import { createContext, useEffect, useReducer } from "react";
-import { getLoginedUser } from "../API/authAPI";
+import {
+  getLoginedUser,
+  getLoginedUserRequest,
+  apiProcess,
+} from "../API/authAPI";
 
 export const AuthContext = createContext();
 
 function reducer(state, action) {
   if (action.type === "logined") {
-    console.log("asdfasdf");
-    if (action.payload.token){
-      sessionStorage.setItem("token", action.payload.token);
+    if (action.payload.accessToken) {
+      console.log("asdfasdf", action.payload);
+      sessionStorage.setItem("accessToken", action.payload.accessToken);
     }
+    console.log("action.payload.refreshToken", action.payload.refreshToken);
+    if (action.payload.refreshToken)
+      sessionStorage.setItem("refreshToken", action.payload.refreshToken);
     return { ...state, ...action.payload, isLogin: true };
   }
   if (action.type === "logout") {
-    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
     return { user: null, token: null };
   }
   return state;
@@ -23,10 +31,10 @@ export const AuthProvider = (props) => {
 
   useEffect(() => {
     const autoLogin = async () => {
-      const token = sessionStorage.getItem("token");
-      if (token) {
-        const user = await getLoginedUser();
-        console.log('user', user)
+      const accessToken = sessionStorage.getItem("accessToken");
+      if (accessToken) {
+        console.log("getLoginedUserRequest", typeof getLoginedUserRequest);
+        const user = await apiProcess(getLoginedUserRequest);
         dispatch({ type: "logined", payload: user });
       }
     };

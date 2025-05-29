@@ -1,12 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const { register, login } = require("../controllers/authController");
-const { authMiddleWare } = require("../middlware/authMiddleware");
+const {
+  authMiddleWare,
+  refreshTokenMiddleWare,
+} = require("../middlware/authMiddleware");
 
 router.get("/me", authMiddleWare, async (req, res) => {
   console.log("req.loginUser", req.loginUser);
   res.send(req.loginUser);
 });
+
+router.get("/accessToken", refreshTokenMiddleWare);
 
 router.post("/create", async (req, res) => {
   const user = await register(req.body);

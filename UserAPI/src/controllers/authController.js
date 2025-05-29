@@ -5,7 +5,7 @@ const {
 } = require("../services/userService");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const privateKey = "superSecret";
+const { privateKey, refreshTokenKey } = require("../utils/const");
 const register = async (userBody) => {
   const { firstName, lastName, emailId, password } = userBody;
 
@@ -25,12 +25,15 @@ const register = async (userBody) => {
   return user;
 };
 
+const getAccessToken = async ({ refreshToken }) => {};
+
 const login = async ({ emailId, password }) => {
   const user = await checkPassword({ emailId, password });
-  const token = await jwt.sign(user, privateKey, { expiresIn: "3d" });
-  const verifiedResult = await jwt.verify(token, privateKey);
-  console.log("verifiedResult", token, verifiedResult);
-  return { user, token };
+  const accessToken = await jwt.sign(user, privateKey, { expiresIn: "3h" });
+  const refreshToken = await jwt.sign(user, refreshTokenKey, {
+    expiresIn: "1d",
+  });
+  return { user, accessToken, refreshToken };
 };
 
 module.exports = {
