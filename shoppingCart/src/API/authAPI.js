@@ -10,18 +10,20 @@ export const loginRequest = async ({ emailId, password }) => {
 
 export const getLoginedUser = async () => {
   const token = sessionStorage.getItem("accessToken");
-  const result = await axios.get("http://localhost:3001/api/auth/me", {
+  const request = axios.request("http://localhost:3001/api/auth/me", {
     headers: { Authorization: `Bearer ${token}` },
   });
-  return result.data;
+
+  const result = await apiProcess(request);
+  return result;
 };
 
-export const getLoginedUserRequest = async () => {
-  const token = sessionStorage.getItem("accessToken");
-  return axios.get("http://localhost:3001/api/auth/me", {
-    headers: { Authorization: `Bearer ${token}1` },
-  });
-};
+// export const getLoginedUserRequest = async () => {
+//   const token = sessionStorage.getItem("accessToken");
+//   return axios.get("http://localhost:3001/api/auth/me", {
+//     headers: { Authorization: `Bearer ${token}1` },
+//   });
+// };
 
 export const getAccessToken = async () => {
   const token = sessionStorage.getItem("refreshToken");
@@ -34,10 +36,12 @@ export const getAccessToken = async () => {
 export const apiProcess = async (request) => {
   let count = 0;
   const excution = async () => {
+    console.log("call", request)
     if (count > 1) throw Error("cannot get token");
     try {
       count++;
-      const result = await request();
+      const result = await request;
+      console.log('2aa',result);
       return result.data;
     } catch (e) {
       if (count < 2) {

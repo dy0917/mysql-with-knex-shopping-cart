@@ -1,8 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 import {
   getLoginedUser,
-  getLoginedUserRequest,
-  apiProcess,
 } from "../API/authAPI";
 
 export const AuthContext = createContext();
@@ -33,8 +31,7 @@ export const AuthProvider = (props) => {
     const autoLogin = async () => {
       const accessToken = sessionStorage.getItem("accessToken");
       if (accessToken) {
-        console.log("getLoginedUserRequest", typeof getLoginedUserRequest);
-        const user = await apiProcess(getLoginedUserRequest);
+        const user = await getLoginedUser();
         dispatch({ type: "logined", payload: user });
       }
     };
